@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { setCustomValue } from './customSlice'
-import { sendData } from './CustomActions'
+import { sendData, connect, disconnect } from './CustomActions'
 
 function App() {
 
@@ -16,8 +16,8 @@ function App() {
         <div>
             <h2>Store Value: {storeValue}</h2>
             <div>
-                {/* <button onClick={() => dispatch(sendData('SOCKET/CONNECT'))}>Connect</button> */}
-                {/* <button onClick={() => dispatch(sendData('SOCKET/DISCONNECT'))}>Disconnect</button> */}
+                <button onClick={() => dispatch(connect())}>Connect</button>
+                <button onClick={() => dispatch(disconnect())}>Disconnect</button>
             </div>
             <div>
                 <input type="text" value={formValue} onChange={(event) => setFormValue(event.target.value)} />

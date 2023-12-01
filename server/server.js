@@ -42,4 +42,6 @@ setInterval(() => {
         let rand = Math.round(Math.random() * 1000);
         clients[id].send(rand)
     }
+    console.log('Clients: ' + Object.keys(clients).length)
+
 }, 3000)
