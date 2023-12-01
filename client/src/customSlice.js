@@ -7,12 +7,12 @@ export const customSlice = createSlice({
         value: 'Unset'
     },
     reducers: {
-        setValue: (state, action) => {
+        setCustomValue: (state, action) => {
             state.value = action.payload;
         }
     }
 })
 
-export const { setValue } = customSlice.actions;
+export const { setCustomValue } = customSlice.actions;
 
 export default customSlice.reducer

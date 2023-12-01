@@ -1,12 +1,57 @@
 
 const { WebSocketServer } = require('ws');
 const http = require('http');
+const { v4: uuidv4 } = require('uuid');
 
 const PORT = 8000;
 
 // Spinning the HTTP server and the WebSocket server.
 const server = http.createServer();
 const wsServer = new WebSocketServer({ server });
+
+clients = {}
+
+function handleDisconnect(userId) {
+    console.log(`User disconnected!`);
+    delete clients[userId];
+    console.log('Num active connections: ' + Object.keys(clients).length)
+}
+
+wsServer.on('connection', (connection) => {
+    console.log('User connected!')
+
+    const userId = uuidv4();
+    clients[userId] = connection;
+
+    console.log('Num active connections: ' + Object.keys(clients).length)
+
+    wsServer.on('close', () => handleDisconnect(userId));
+})
+
 server.listen(PORT, () => {
     console.log(`WebSocket server is running on port ${PORT}`);
 });
+
+setInterval(() => {
+    // Send new data to each client
+    for (var id in clients) {
+        let rand = Math.round(Math.random() * 1000);
+        clients[id].send(rand)
+    }
+}, 3000)
+
+setInterval(() => {
+    // 0: Connecting
+    // 1: Open
+    // 2: Closing
+    // 3: Closed
+
+    // Check if each client has disconnected
+    for (var id in clients) {
+        if (clients[id].readyState === 2 || clients[id].readyState === 3) {
+            delete clients[id];
+        }
+    }
+
+    console.log('Num active connections: ' + Object.keys(clients).length)
+},1000)
