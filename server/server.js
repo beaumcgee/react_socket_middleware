@@ -25,7 +25,11 @@ wsServer.on('connection', (connection) => {
 
     console.log('Num active connections: ' + Object.keys(clients).length)
 
-    wsServer.on('close', () => handleDisconnect(userId));
+    connection.on('close', () => handleDisconnect(userId));
+
+    connection.on('message', (msg) => {
+        console.log(`Received : ${msg}`)
+    })
 })
 
 server.listen(PORT, () => {
@@ -39,19 +43,3 @@ setInterval(() => {
         clients[id].send(rand)
     }
 }, 3000)
-
-setInterval(() => {
-    // 0: Connecting
-    // 1: Open
-    // 2: Closing
-    // 3: Closed
-
-    // Check if each client has disconnected
-    for (var id in clients) {
-        if (clients[id].readyState === 2 || clients[id].readyState === 3) {
-            delete clients[id];
-        }
-    }
-
-    console.log('Num active connections: ' + Object.keys(clients).length)
-},1000)

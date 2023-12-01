@@ -15,19 +15,13 @@ const SocketMiddleware = () => {
 
         ws.onclose = () => {
             console.log('Disconnected from server')
-        }        
+        }
 
         return next => action => {
-            // if (action.type == "SEND_WEBSOCKET_MESSAGE") {
-            //     socket.send(action.payload);
-            //     return;
-            // }
-            // switch (action.type) {
-            //     case 'socket/disconnect':
-            //         console.log('Disconnecting')
-            //         ws.close()
-            //         break;
-            // }
+            switch (action.type) {
+                case 'SOCKET/SENDDATA':                    
+                    ws.send(JSON.stringify(action.payload))
+            }
 
             return next(action);
         }
